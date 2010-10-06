@@ -1619,6 +1619,38 @@ var PdObjects = {
 			
 		}
 	},
+	
+		//only outputs on a different value 
+	"change": {
+		"defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"only outputs on a different value",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.last = parseFloat(this.args[5]);
+			} else {
+				this.last = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+		//TODO: 'set' stuff
+			
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: change: no method for '" + val + "'");
+				}	
+                            else if(newnum!=this.last){//it's new. send it 
+	                     this.sendmessage(0, newnum);
+	                     this.last=newnum;
+	                     }
+
+	                     
+			
+		}
+	},
 };
 
 // object name aliases
