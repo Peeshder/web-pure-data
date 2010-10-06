@@ -2122,6 +2122,50 @@ var PdObjects = {
 			}
 		}
 	},
+	
+	
+	// divide two numbers together (not quite an alias, its rounded to the int)
+	"div": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"divide the left input by the right, rounded to the nearest integer",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.multiplier = parseFloat(this.args[5]);
+			} else {
+				this.multiplier = 0;
+			}
+		},
+		"message": function(inletnum, val) {
+			// right inlet changes value
+			if (inletnum == 1) {
+				var multiplier = parseFloat(val);
+				// if this is a valid number, set our divisor
+				if (isNaN(multiplier)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.multiplier = multiplier;
+				}
+			// left inlet outputs the division
+			} else if (inletnum == 0) {
+				var parts = this.toarray(val);
+				var mul = parseFloat(parts[0]);
+				// use the second number to set the divisor
+				if (parts.length > 1 && !isNaN(mul)) {
+					// if it's a valid number send to the second outlet
+					this.message(1, parts[1]);
+				}
+				// if it's a valid float, use it to output a division
+				if (isNaN(mul)) {
+					this.pd.log("error: /: no method for '" + parts[0] + "'");
+				} else {
+					this.sendmessage(0, parseInt(mul / this.multiplier));
+				}
+			}
+		}
+	}
 };
 
 // object name aliases
