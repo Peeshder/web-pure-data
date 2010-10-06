@@ -2076,6 +2076,52 @@ var PdObjects = {
 			}
 		}
 	},
+	
+	// exponentiate the left inlet by the right
+	"pow": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"exponentiate the left inlet to the power of the right",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.multiplier = parseFloat(this.args[5]);
+			} else {
+				this.multiplier = 0;
+			}
+		},
+		"message": function(inletnum, val) {
+			// right inlet changes value
+			if (inletnum == 1) {
+				var multiplier = parseFloat(val);
+				// if this is a valid number, set our divisor
+				if (isNaN(multiplier)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.multiplier = multiplier;
+				}
+			// left inlet outputs the division
+			} else if (inletnum == 0) {
+				var parts = this.toarray(val);
+				var mul = parseFloat(parts[0]);
+				// use the second number to set the divisor
+				if (parts.length > 1 && !isNaN(mul)) {
+					// if it's a valid number send to the second outlet
+					this.message(1, parts[1]);
+				}
+				// if it's a valid float, use it to output a division
+				if (isNaN(mul)) {
+					this.pd.log("error: pow: no method for '" + parts[0] + "'");
+				} else if(mul<=0){
+					this.sendmessage(0, "0");//pd doesn't like negative exponents
+				}
+				else{
+					this.sendmessage(0, Math.pow(mul, this.multiplier));//exponentiate
+				}
+			}
+		}
+	},
 };
 
 // object name aliases
