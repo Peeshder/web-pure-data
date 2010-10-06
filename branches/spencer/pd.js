@@ -1485,6 +1485,52 @@ var PdObjects = {
 		}	
 			
 		},
+		
+		
+		//routes integers to either the left or right depending on their value 
+	"moses": { //not done
+		"defaultinlets":1,
+	        "defaultoutlets":2,
+	        "description":"route integers to either the left or right depending on their value ",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.mid = parseFloat(this.args[5]);
+			} else {
+				this.mid = 1;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+		
+			// right inlet changes value
+			if (inletnum == 1) {
+				var mid = parseFloat(val);
+				// if this is a valid number, set our max
+				if (isNaN(max)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.mid = mid;
+				}
+			// left inlet outputs the number
+			} 
+			else if (inletnum == 0) {
+			
+                             val=parseFloat(val);
+                             	if (isNaN(val)) {
+					this.pd.log("error: moses: no method for '" + val + "'");
+				}	
+                            else if(val>=this.mid){
+	                     this.sendmessage(1, val);//TODO; send it to the right side
+	                     }
+	                     else if(val<this.mid){//send it to the left side
+	                     this.sendmessage(0, val);
+	                     }
+	                     
+			}
+		}
+	},
 };
 
 // object name aliases
