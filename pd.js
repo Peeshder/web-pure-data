@@ -593,6 +593,9 @@ var PdObject = function (proto, pd, type, args) {
 		endpoint = set to true if this object is a dsp sink (e.g. [dac~], [outlet~], [print~]
 		outletTypes = dsp/message
 		dspinlets = which inlet numbers can do dsp
+		defaultinlets = inlet # without arguments
+		defaultoutlets = outlet # without arguments
+		description: = what it does, briefly
 	
 	methods:
 		preinit = method which runs after object creation, but before the graph has been instantiated
@@ -607,7 +610,10 @@ var PdObjects = {
 	
 	/************************** Basic types objects ******************************/
 	
-	"table": {
+	"table": {        
+	        "defaultinlets":0,
+	        "defaultoutlets":0,
+	        "description":"an array of data",
 		"init": function() {
 			if (this.args.length >= 4) {
 				this.name = this.args[2];
@@ -616,36 +622,12 @@ var PdObjects = {
 		},
 	},
 	
-	"float": {
-		"outletTypes": ["message"],
-		"init": function() {
-			this.value = parseFloat(this.args[5]);
-			if (isNaN(this.value))
-				this.value = 0;
-		},
-		"message": function(inletnum, message) {
-			if (inletnum == 0) {
-				var atoms = this.toarray(message);
-				var firstfloat = parseFloat(atoms[0]);
-				// the float object outputs it's value if it gets a bang
-				if (atoms[0] == "bang") {
-					this.sendmessage(0, this.value);
-				// if it gets some other symbol, throws an error
-				} else if (isNaN(firstfloat)) {
-					this.pd.log("error: float: no method for '" + atoms[0] + "'");
-				// if it gets a new value then it sets and outputs that value
-				} else {
-					this.value = firstfloat;
-					this.sendmessage(0, this.value);
-				}
-			} else {
-				// TODO: inlet two sets the value
-			}
-		}
-	},
 	
 	// message objects like [hello $1(
 	"msg": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"message objects like 'hello $1'",
 		"outletTypes": ["message"],
 		"init": function() {
 			// arguments set my value
@@ -695,6 +677,9 @@ var PdObjects = {
 	
 	// basic oscillator
 	"osc~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"oscillator",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0],
 		"init": function() {
@@ -719,6 +704,9 @@ var PdObjects = {
 	
 	// digital to analogue converter (sound output)
 	"dac~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":0,
+	        "description":"digital to analogue converter (sound output)",
 		"endpoint": true,
 		"outletTypes": [],
 		"dspinlets": [0, 1],
@@ -734,7 +722,10 @@ var PdObjects = {
 	},
 	
 	// dsp multiply object
-	"*~": {
+	"*~": {        
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"dsp multiply two signals",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0, 1],
 		"init": function() {
@@ -755,6 +746,9 @@ var PdObjects = {
 	
 	// dsp divide object (d_arithmetic.c line 454 - over_perform() )
 	"/~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"divide two signals",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0, 1],
 		"init": function() {
@@ -778,6 +772,9 @@ var PdObjects = {
 	
 	// dsp addition object
 	"+~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"add two signals",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0, 1],
 		"init": function() {
@@ -797,6 +794,9 @@ var PdObjects = {
 	
 	// dsp subtraction object
 	"-~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"subtract two signals",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0, 1],
 		"init": function() {
@@ -816,6 +816,9 @@ var PdObjects = {
 	
 	// basic phasor (0 to 1)
 	"phasor~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"phasor from 0 to 1",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0],
 		"init": function() {
@@ -837,6 +840,9 @@ var PdObjects = {
 	
 	// midi to frequency in the dsp domain
 	"mtof~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"convert midi to frequency in the dsp domain",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0],
 		"dsptick": function() {
@@ -856,7 +862,10 @@ var PdObjects = {
 	},
 	
 	// read data from a table with no interpolation
-	"tabread~": {
+	"tabread~": {        
+	        "defaultinlets":0,
+	        "defaultoutlets":1,
+	        "description":"read data from a table with no interpolation",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0],
 		"init": function() {
@@ -876,6 +885,9 @@ var PdObjects = {
 	
 	// creates simple dsp lines
 	"line~": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"creates simple dsp lines",
 		"outletTypes": ["dsp"],
 		"dspinlets": [0],
 		"init": function() {
@@ -961,6 +973,9 @@ var PdObjects = {
 	
 	// ordinary message receiver
 	"receive": {
+	        "defaultinlets":0,
+	        "defaultoutlets":1,
+	        "description":"listen out for distant messages",
 		"outletTypes": ["message"],
 		"init": function() {
 			// listen out for messages from the either with the name of our argument
@@ -977,6 +992,9 @@ var PdObjects = {
 	
 	// pd trigger type - right to left
 	"trigger": {
+	        "defaultinlets":1,
+	        "defaultoutlets":2,
+	        "description":"do several things, in sequence, right to left",
 		"outletTypes": [],
 		"preinit": function() {
 			this.triggers = this.args.slice(5);
@@ -1004,6 +1022,9 @@ var PdObjects = {
 	
 	// packs various incoming things into a list
 	"pack": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"packs various incoming things into a list",
 		"outletTypes": ["message"],
 		"init": function() {
 			this.slots = this.args.slice(5);
@@ -1082,6 +1103,9 @@ var PdObjects = {
 	
 	// unpacks a list of atoms to their correct types
 	"unpack": {
+	        "defaultinlets":1,
+	        "defaultoutlets":2,
+	        "description":"unpack a list of atoms to their correct types",
 		"outletTypes": [],
 		"preinit": function() {
 			this.slots = this.args.slice(5);
@@ -1138,6 +1162,9 @@ var PdObjects = {
 	
 	// multiply two numbers together
 	"*": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"multiply two numbers together",
 		"outletTypes": ["message"],
 		"init": function() {
 			// do i have a numeric argument
@@ -1178,6 +1205,9 @@ var PdObjects = {
 	
 	// add two numbers together
 	"+": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"add two numbers together",
 		"outletTypes": ["message"],
 		"init": function() {
 			// do i have a numeric argument
@@ -1220,6 +1250,9 @@ var PdObjects = {
 	
 	// loadbang (on launch it sends a bang)
 	"loadbang": {
+	        "defaultinlets":0,
+	        "defaultoutlets":1,
+	        "description":"send a bang when the program begins",
 		"outletTypes": ["message"],
 		"init": function() {
 			var me = this;
@@ -1231,6 +1264,9 @@ var PdObjects = {
 	
 	// print objects
 	"print": {
+	        "defaultinlets":1,
+	        "defaultoutlets":0,
+	        "description":"print messages to the console",
 		"init": function() {
 			// listen out for messages from the either with the name of our argument
 			if (this.args.length >= 6) {
@@ -1243,6 +1279,7 @@ var PdObjects = {
 			this.pd.log(this.printname + ": " + message);
 		},
 	},
+	
 
 };
 
