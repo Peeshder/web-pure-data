@@ -1415,6 +1415,36 @@ var PdObjects = {
 			}
 		},
 		
+		//toggle switch object
+	"tgl": {
+		"defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"toggle between 1 and 0 with a bang or click",
+		"outletTypes": ["message"],
+		"init": function() {
+		this.state=0;
+		},
+		"message": function(inletnum, message) {
+		        //explicit states
+		        if(message=="1"){
+		        this.state=1;
+			this.sendmessage(0, "1");
+			}
+			else if(message=="0"){
+		        this.state=0;
+			this.sendmessage(0, "0");
+			}
+			//switches state with a bang
+			else if(message=="bang"){
+			if(this.state==1){this.state=0;this.sendmessage(0, "0");}
+			else {this.state=1;this.sendmessage(0, "1");}
+			}
+			//it doesn't like text messages
+			else {this.pd.log("error: tgl: no method for '" + message + "'");
+			}
+			}
+			
+		},
 };
 
 // object name aliases
