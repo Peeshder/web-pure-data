@@ -1353,6 +1353,41 @@ var PdObjects = {
 			}
 		}
 	},
+	
+	//stores and outputs an integer
+	"int": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"store and output an integer",
+		"outletTypes": ["message"],
+		"init": function() {
+			this.value = parseInt(this.args[5]);
+			if (isNaN(this.value))
+				this.value = 0;
+		},
+		"message": function(inletnum, message) {
+			if (inletnum == 0) {
+				var atoms = this.toarray(message);
+				var firstint = parseInt(atoms[0]);
+				// the float object outputs it's value if it gets a bang
+				if (atoms[0] == "bang") {
+					this.sendmessage(0, this.value);
+				// if it gets some other symbol, throws an error
+				} else if (isNaN(firstint)) {
+					this.pd.log("error: float: no method for '" + atoms[0] + "'");
+				// if it gets a new value then it sets and outputs that value
+				} else {
+					this.value = firstint;
+					this.sendmessage(0, this.value);
+				}
+			} else {
+				// inlet two sets the value
+				var atoms = this.toarray(message);
+				var firstint = parseInt(atoms[0]);
+				if (!isNaN(firstint)) { this.value = firstint;}
+			}
+		}
+	},
 
 };
 
