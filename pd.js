@@ -1735,6 +1735,172 @@ var PdObjects = {
 			
 		}
 	},
+	
+				//output 1 if left is less than (or =) right, 0 if not
+	"<=": {
+		"defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"output 1 if left is less than (or equal) the right, 0 if not",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+				//right inlet sets new value
+					if (inletnum == 1) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: <=: no method for '" + val + "'");
+				}	
+                            else {
+                            this.right=newnum;
+                            }
+                            }
+				//left inlet tests match
+			if (inletnum == 0) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: <=: no method for '" + val + "'");
+				}	
+                            else if(newnum<=this.right){//if it's true, send 1 
+	                     this.sendmessage(0, "1");
+	                     }
+	                     else{this.sendmessage(0, "0");}//if not, send 0
+			}
+	                     
+			
+		}
+	},
+		//output 1 if left is greater than (or =) right, 0 if not
+	">=": {
+		"defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"output 1 if left is greater than (or equal) the right, 0 if not",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+				//right inlet sets new value
+					if (inletnum == 1) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: >=: no method for '" + val + "'");
+				}	
+                            else {
+                            this.right=newnum;
+                            }
+                            }
+				//left inlet tests match
+			if (inletnum == 0) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: >=: no method for '" + val + "'");
+				}	
+                            else if(newnum>=this.right){//if it's true, send 1 
+	                     this.sendmessage(0, "1");
+	                     }
+	                     else{this.sendmessage(0, "0");}//if not, send 0
+			}
+	                     
+			
+		}
+	},
+	
+				//output 1 if left is less than right, 0 if not
+	"<": {
+		"defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"output 1 if left is less than right, 0 if not",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+				//right inlet sets new value
+					if (inletnum == 1) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: <: no method for '" + val + "'");
+				}	
+                            else {
+                            this.right=newnum;
+                            }
+                            }
+				//left inlet tests match
+			if (inletnum == 0) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: <: no method for '" + val + "'");
+				}	
+                            else if(newnum<this.right){//if it's true, send 1 
+	                     this.sendmessage(0, "1");
+	                     }
+	                     else{this.sendmessage(0, "0");}//if not, send 0
+			}
+	                     
+			
+		}
+	},
+		//output 1 if left is greater than right, 0 if not
+	">": {
+		"defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"output 1 if left is greater than right, 0 if not",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+				//right inlet sets new value
+					if (inletnum == 1) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: >: no method for '" + val + "'");
+				}	
+                            else {
+                            this.right=newnum;
+                            }
+                            }
+				//left inlet tests match
+			if (inletnum == 0) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: >: no method for '" + val + "'");
+				}	
+                            else if(newnum>this.right){//if it's true, send 1 
+	                     this.sendmessage(0, "1");
+	                     }
+	                     else{this.sendmessage(0, "0");}//if not, send 0
+			}
+	                     
+			
+		}
+	},
 };
 
 // object name aliases
