@@ -1531,6 +1531,51 @@ var PdObjects = {
 			}
 		}
 	},
+	
+	
+	//send the left input to the right output, and opposite 
+	"swap": { 
+		"defaultinlets":2,
+	        "defaultoutlets":2,
+	        "description":"send the left input to the right output, and opposite",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = 0;//default 0
+			}
+		},
+		"message": function(inletnum, val) {
+		
+		
+			// right inlet changes value
+			if (inletnum == 1) {
+				var right = parseFloat(val);
+				// if this is a valid number, set our right value
+				if (isNaN(right)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.right = right;
+				}
+			
+			} 
+			else if (inletnum == 0) {
+			// left inlet outputs the number
+                             val=parseFloat(val);
+                             	if (isNaN(val)) {
+					this.pd.log("error: moses: no method for '" + val + "'");
+				}	
+                            else{
+                            var left=val;
+	                     this.sendmessage(0, right); //output them backwards
+	                     this.sendmessage(1, left);
+	                     }
+	                     
+			}
+		}
+	},
 };
 
 // object name aliases
