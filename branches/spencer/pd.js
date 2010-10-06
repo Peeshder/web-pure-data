@@ -70,6 +70,13 @@ var Pd = function Pd(sampleRate, bufferSize, debug, arrayType) {
 		return this;
 	}
 	
+	/** Initiate a load of a Pd source string **/
+	this.loadfromstring = function (string, callback) {
+		this.loadcallback = callback;
+		this.loadcomplete(string,{"status":200});
+		return string;
+	}
+	
 	/** send a message from outside the graph to a named receiver inside the graph **/
 	this.send = function(name, val) {
 		this.debug("graph received: " + name + " " + val);
