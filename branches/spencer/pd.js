@@ -2030,6 +2030,52 @@ var PdObjects = {
 			}
 		}
 	},
+	
+	
+	// the remainder of dividing the left input by the right
+	"mod": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"get the remainder of dividing the left input by the right",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.multiplier = parseInt(this.args[5]); //this object uses int, not float
+			} else {
+				this.multiplier = 0;
+			}
+		},
+		"message": function(inletnum, val) {
+			// right inlet changes value
+			if (inletnum == 1) {
+				var multiplier = parseInt(val);
+				// if this is a valid number, set our divisor
+				if (isNaN(multiplier)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.multiplier = multiplier;
+				}
+			// left inlet outputs the division
+			} else if (inletnum == 0) {
+				var parts = this.toarray(val);   //10/3=3
+				var mul = parseInt(parts[0]);
+				// use the second number to set the divisor
+				if (parts.length > 1 && !isNaN(mul)) {
+					// if it's a valid number send to the second outlet
+					this.message(1, parts[1]);
+				}
+				// if it's a valid float, use it to output a multiplication
+				if (isNaN(mul)) {
+					this.pd.log("error: mod: no method for '" + parts[0] + "'");
+				} else {
+				var tmp= parseInt(mul / this.multiplier);
+				var remainder= mul-parseInt(tmp*this.multiplier);
+					this.sendmessage(0, remainder);
+				}
+			}
+		}
+	},
 };
 
 // object name aliases
