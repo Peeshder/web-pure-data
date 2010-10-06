@@ -1901,6 +1901,90 @@ var PdObjects = {
 			
 		}
 	},
+	
+			//logical AND - outputs 1 if both inputs are non-zero
+	"&&": {
+		"defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"logical AND - outputs 1 if both inputs are non-zero",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+				//right inlet sets new value
+					if (inletnum == 1) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: &&: no method for '" + val + "'");
+				}	
+                            else {
+                            this.right=newnum;
+                            }
+                            }
+				//left inlet tests match
+			if (inletnum == 0) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: &&: no method for '" + val + "'");
+				}	
+                            else if((newnum!=0) && (this.right!=0)){//if it's true, send 1 
+	                     this.sendmessage(0, "1");
+	                     }
+	                     else{this.sendmessage(0, "0");}//if not, send 0
+			}
+	                     
+			
+		}
+	},
+	
+			//logical OR - outputs 1 if either inputs are non-zero
+	"||": {
+		"defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"logical OR - outputs 1 if either inputs are non-zero",
+		"outletTypes": ["message"],
+		"init": function() {
+			// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.right = parseFloat(this.args[5]);
+			} else {
+				this.right = null;
+			}
+		},
+		"message": function(inletnum, val) {
+		
+				//right inlet sets new value
+					if (inletnum == 1) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: ||: no method for '" + val + "'");
+				}	
+                            else {
+                            this.right=newnum;
+                            }
+                            }
+				//left inlet tests match
+			if (inletnum == 0) {	
+                             var newnum=parseFloat(val);
+                             	if (isNaN(newnum)) {
+					this.pd.log("error: ||: no method for '" + val + "'");
+				}	
+                            else if((newnum!=0) || (this.right!=0)){//if it's true, send 1 
+	                     this.sendmessage(0, "1");
+	                     }
+	                     else{this.sendmessage(0, "0");}//if not, send 0
+			}
+	                     
+			
+		}
+	}, //TODO:haven't done bitwise &, |, <<, >>
 };
 
 // object name aliases
