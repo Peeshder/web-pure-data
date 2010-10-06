@@ -1389,6 +1389,32 @@ var PdObjects = {
 		}
 	},
 
+	          //bang button object
+	"bng": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"send a bang for any input or user click",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, message) {
+			this.sendmessage(0, "bang");
+			}
+		},
+		
+			          //for some reason, this isnt an alias. bang button object
+	"bang": {
+		"defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"send a bang for any input",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, message) {
+			this.sendmessage(0, "bang");
+			}
+		},
+		
 };
 
 // object name aliases
