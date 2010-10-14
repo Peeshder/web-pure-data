@@ -2357,7 +2357,87 @@ var PdObjects = {
 		}
 	},
 	
+					// max
+	"max": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"repeat the input unless it exceeds a maximum",
+		"outletTypes": ["message"],
+		"init": function() {// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.number = parseFloat(this.args[5]);
+			} else {
+				this.number = 0;
+			}
+		},
+		"message": function(inletnum, val) {
+					// right inlet changes value
+			if (inletnum == 1) {
+				var number = parseFloat(val);
+				// if this is a valid number, set our number
+				if (isNaN(number)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.number = number;
+				}
+			// left inlet outputs the math
+			} else if (inletnum == 0) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: max: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+				
+				if(number>=this.number){this.sendmessage(0,this.number);}
+				if(number<this.number){this.sendmessage(0,number);}
+				
+				}
+			}
+			
+		}
+	},
 	
+						// min
+	"min": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"repeat the input unless it drops below a minimum",
+		"outletTypes": ["message"],
+		"init": function() {// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.number = parseFloat(this.args[5]);
+			} else {
+				this.number = 0;
+			}
+		},
+		"message": function(inletnum, val) {
+					// right inlet changes value
+			if (inletnum == 1) {
+				var number = parseFloat(val);
+				// if this is a valid number, set our number
+				if (isNaN(number)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.number = number;
+				}
+			// left inlet outputs the math
+			} else if (inletnum == 0) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: min: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+				
+				if(number<=this.number){this.sendmessage(0,this.number);}
+				if(number>this.number){this.sendmessage(0,number);}
+				
+				}
+			}
+			
+		}
+	},
 	
 	
 };
