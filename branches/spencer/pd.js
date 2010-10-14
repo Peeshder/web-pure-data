@@ -2604,6 +2604,66 @@ var PdObjects = {
 	},
 	
 	
+						// keyboard down
+	"key": {
+	        "defaultinlets":0,
+	        "defaultoutlets":1,
+	        "description":"get button # on keyboard press",
+		"outletTypes": ["message"],
+		"init": function() {
+		var the=this;
+		 document.onkeypress = function(e) { 
+		 var unicode=e.keyCode? e.keyCode : e.charCode;
+		 the.sendmessage(0, unicode);
+		 } 
+		 
+		},
+		"message": function(inletnum, val) {
+		}
+	},
+	
+						// keyboard up
+	"keyup": {
+	        "defaultinlets":0,
+	        "defaultoutlets":1,
+	        "description":"get button # on keyboard up",
+		"outletTypes": ["message"],
+		"init": function() {
+		var the=this;
+		 document.onkeyup = function(e) { 
+		 var unicode=e.keyCode? e.keyCode : e.charCode;
+		 the.sendmessage(0, unicode); //TODO:weird, wrong numbers?
+		 } 
+		 
+		},
+		"message": function(inletnum, val) {
+		}
+	},
+							// keyboard button name
+	"keyname": {
+	        "defaultinlets":0,
+	        "defaultoutlets":2,
+	        "description":"get keyboard press state and button name",
+		"outletTypes": ["message"],
+		"init": function() {
+		var the=this;
+		
+		 document.onkeypress = function(e) { 
+		 the.sendmessage(0, "1"); //left outlet says its pressed
+		 var unicode=e.keyCode? e.keyCode : e.charCode; 
+		 unicode=String.fromCharCode(unicode);
+		 the.sendmessage(1, unicode); //right outlet says the button name
+		 } 
+		 document.onkeyup = function(e) {
+		  the.sendmessage(0, "0"); //left outlet says its up
+		 }
+		 
+		},
+		"message": function(inletnum, val) {
+		}
+	}
+	
+	
 };
 
 // object name aliases
