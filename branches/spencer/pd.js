@@ -2298,6 +2298,68 @@ var PdObjects = {
 		}
 	},
 	
+	
+						// arc tangent
+	"atan": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"find the arc tangent of the input",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: atan: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+					this.sendmessage(0, Math.atan(number));//math
+				}
+			
+		}
+	},
+						// arc tangent2
+	"atan2": {
+	        "defaultinlets":2,
+	        "defaultoutlets":1,
+	        "description":"find the arc tangent of $1/$2",
+		"outletTypes": ["message"],
+		"init": function() {// do i have a numeric argument
+			if (this.args.length >= 6) {
+				this.number = parseFloat(this.args[5]);
+			} else {
+				this.number = 0;
+			}
+		},
+		"message": function(inletnum, val) {
+					// right inlet changes value
+			if (inletnum == 1) {
+				var number = parseFloat(val);
+				// if this is a valid number, set our number
+				if (isNaN(number)) {
+					this.pd.log("error: inlet: expected 'float' but got '" + val + "'");
+				} else {
+					this.number = number;
+				}
+			// left inlet outputs the math
+			} else if (inletnum == 0) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: atan2: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+					this.sendmessage(0, Math.atan2(number,this.number));//math
+				}
+			}
+			
+		}
+	},
+	
+	
+	
+	
 };
 
 // object name aliases
