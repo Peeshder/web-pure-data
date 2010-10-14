@@ -2189,6 +2189,30 @@ var PdObjects = {
 		}
 	},
 	
+		// log
+	"log": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"find the log of base e",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);
+				// if it's a valid float, use it to output
+				if (isNaN(number)) {
+					this.pd.log("error: log: no method for '" + val + "'");
+				} 
+				else{
+				var end=Math.log(number);
+				if(parseFloat(end)){end=-1000;}//not sure why pd does this, but it does. //TODO:takecare of 'infinity' if input==0
+					this.sendmessage(0, end);//math
+				}
+			
+		}
+	},
+	
 };
 
 // object name aliases
