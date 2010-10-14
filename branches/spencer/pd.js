@@ -2165,7 +2165,30 @@ var PdObjects = {
 				}
 			}
 		}
-	}
+	},
+	 
+	// square root
+	"sqrt": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"find the square root of a number",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);
+				// if it's a valid float, use it to output
+				if (isNaN(number)) {
+					this.pd.log("error: sqrt: no method for '" + val + "'");
+				} 
+				else{
+					this.sendmessage(0, Math.sqrt(number));//math
+				}
+			
+		}
+	},
+	
 };
 
 // object name aliases
