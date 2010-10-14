@@ -2213,6 +2213,70 @@ var PdObjects = {
 		}
 	},
 	
+		
+		// sin
+	"sin": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"find the sin of the input (in radians)",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: sin: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+					this.sendmessage(0, Math.sin(number));//math
+				}
+			
+		}
+	},
+	
+			// tan
+	"tan": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"find the tan of the input (in radians)",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: tan: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+					this.sendmessage(0, Math.tan(number));//math
+				}
+			
+		}
+	},
+	
+				// cos
+	"cos": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"find the cos of the input (in radians)",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: cos: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+					this.sendmessage(0, Math.cos(number));//math
+				}
+			
+		}
+	},
+	
 };
 
 // object name aliases
