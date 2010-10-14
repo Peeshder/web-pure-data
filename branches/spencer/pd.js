@@ -2277,6 +2277,27 @@ var PdObjects = {
 		}
 	},
 	
+					// absolute number
+	"abs": {
+	        "defaultinlets":1,
+	        "defaultoutlets":1,
+	        "description":"make the input a absolute number, no b.s.",
+		"outletTypes": ["message"],
+		"init": function() {
+		},
+		"message": function(inletnum, val) {
+				var parts = this.toarray(val);//parse a list
+				var number = parseFloat(parts[0]);				
+				if (isNaN(number)) {
+					this.pd.log("error: abs: no method for '" + val + "'");
+				} 
+				else{// if it's a valid float, use it to output
+					this.sendmessage(0, Math.abs(number));//math
+				}
+			
+		}
+	},
+	
 };
 
 // object name aliases
